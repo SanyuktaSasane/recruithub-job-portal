@@ -74,29 +74,32 @@ This helps recruiters quickly identify the most suitable candidates.
 
 ---
 
+
 ## 📂 Project Structure
 
+```
 recruithub-job-portal
 │
 ├── accounts
-│ ├── views.py
-│ ├── models.py
+│   ├── views.py
+│   └── models.py
 │
 ├── jobs
-│ ├── models.py
-│ ├── views.py
+│   ├── views.py
+│   └── models.py
 │
 ├── templates
-│ ├── accounts
-│ ├── jobs
+│   ├── accounts
+│   └── jobs
 │
 ├── recruithub
-│ ├── settings.py
-│ ├── urls.py
+│   ├── settings.py
+│   └── urls.py
 │
 ├── manage.py
 ├── requirements.txt
 └── build.sh
+```
 
 
 ---
