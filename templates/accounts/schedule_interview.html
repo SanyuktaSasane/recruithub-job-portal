@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Schedule Interview</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            width: 400px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #667eea;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0 15px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Schedule Interview</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Select Mode</label>
+        <select name="mode" required>
+            <option value="online">Online</option>
+            <option value="offline">Offline</option>
+        </select>
+
+        <label>Interview Date & Time</label>
+        <input type="datetime-local" name="date" required>
+
+        <label>Online Link (if online)</label>
+        <input type="url" name="link">
+
+        <label>Location (if offline)</label>
+        <input type="text" name="location">
+
+        <button type="submit">Schedule Interview</button>
+    </form>
+</div>
+
+</body>
+</html>

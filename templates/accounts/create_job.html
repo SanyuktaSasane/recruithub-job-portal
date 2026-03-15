@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Job - RecruitHub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 400px;
+            margin: 80px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #1e3c72;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: none;
+            height: 80px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #1e3c72;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        button:hover {
+            background: #16325c;
+        }
+    </style>
+</head>
+<body>
+<a href="{% url 'candidate_dashboard' %}" 
+   style="
+   background:white;
+   color:#667eea;
+   padding:6px 12px;
+   border-radius:6px;
+   text-decoration:none;
+   font-size:13px;
+   display:inline-block;
+   margin-bottom:20px;
+   ">
+   ← Back to Dashboard
+</a>
+<div class="container">
+    <h2>Create Job</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="title" placeholder="Job Title" required>
+        <textarea name="description" placeholder="Job Description" required></textarea>
+        <input type="text" name="location" placeholder="Location" required>
+        <input type="number" name="salary_min" placeholder="Minimum Salary" required>
+        <input type="number" name="salary_max" placeholder="Maximum Salary" required>
+
+        <button type="submit">Create Job</button>
+    </form>
+</div>
+
+</body>
+</html>

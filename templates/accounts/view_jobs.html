@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Available Jobs - RecruitHub</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        h2 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .search-box input {
+            padding: 10px;
+            width: 200px;
+            border-radius: 6px;
+            border: none;
+            margin-right: 10px;
+        }
+
+        .search-box button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            background: #2a5298;
+            color: white;
+            cursor: pointer;
+        }
+
+        .search-box button:hover {
+            background: #1e3c72;
+        }
+
+        .job-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px auto;
+            max-width: 600px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: 0.3s ease;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .job-card h3 {
+            margin-top: 0;
+            color: #2a5298;
+        }
+
+        .apply-btn {
+            background: #28a745;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .apply-btn:hover {
+            background: #218838;
+        }
+
+        .applied-btn {
+            background: gray;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            border: none;
+        }
+
+        .file-input {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<a href="{% url 'candidate_dashboard' %}" 
+   style="
+   background:white;
+   color:#667eea;
+   padding:6px 12px;
+   border-radius:6px;
+   text-decoration:none;
+   font-size:13px;
+   display:inline-block;
+   margin-bottom:20px;
+   ">
+   ← Back to Dashboard
+</a>
+<h2>Available Jobs</h2>
+
+<div class="search-box">
+    <form method="GET">
+        <input type="text" name="search" placeholder="Search by job title" value="{{ request.GET.search }}">
+        <input type="text" name="location" placeholder="Filter by location" value="{{ request.GET.location }}">
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+{% for job in jobs %}
+<div class="job-card">
+    <h3>{{ job.title }}</h3>
+    <p><strong>Location:</strong> {{ job.location }}</p>
+    <p><strong>Salary:</strong> ₹{{ job.salary_min }} - ₹{{ job.salary_max }}</p>
+    <p>{{ job.description }}</p>
+
+    {% if job.id in applied_jobs %}
+        <button class="applied-btn" disabled>Applied ✅</button>
+    {% else %}
+        <form action="{% url 'apply_job' job.id %}" 
+              method="POST" 
+              enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <input type="file" 
+                   name="resume" 
+                   class="file-input"
+                   required>
+
+            <br>
+
+            <button type="submit" class="apply-btn">Apply Now</button>
+        </form>
+    {% endif %}
+</div>
+{% empty %}
+<p style="text-align:center; color:white;">No jobs available.</p>
+{% endfor %}
+
+</body>
+</html>

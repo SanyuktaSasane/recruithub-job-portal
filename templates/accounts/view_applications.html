@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Applications</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 40px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1e3c72;
+        }
+
+        .application-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            transition: 0.3s ease;
+        }
+
+        .application-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .application-card p {
+            margin: 8px 0;
+            font-size: 15px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #ffeeba;
+            color: #856404;
+        }
+
+        .accepted {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        .accept-btn {
+            background: green;
+        }
+
+        .reject-btn {
+            background: red;
+        }
+
+        .no-app {
+            text-align: center;
+            font-size: 18px;
+            color: gray;
+        }
+
+        .badge {
+            background:#28a745;
+            color:white;
+            padding:4px 10px;
+            border-radius:6px;
+            font-size:12px;
+            font-weight:bold;
+            display:inline-block;
+            margin-bottom:8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<a href="{% url 'company_dashboard' %}"
+   style="
+   background:white;
+   color:#667eea;
+   padding:6px 12px;
+   border-radius:6px;
+   text-decoration:none;
+   font-size:13px;
+   display:inline-block;
+   margin-bottom:20px;">
+   ← Back to Dashboard
+</a>
+
+<h2>Job Applications</h2>
+
+{% for application in applications %}
+<div class="application-card">
+
+    {% if application.ats_score >= 80 %}
+    <span class="badge">⭐ Top Candidate</span>
+    {% endif %}
+
+    <p><strong>Job:</strong> {{ application.job.title }}</p>
+    <p><strong>Candidate:</strong> {{ application.candidate.username }}</p>
+
+    <p><strong>Resume:</strong></p>
+
+    {% if application.resume %}
+    <a href="{{ application.resume.url }}" target="_blank"
+       style="
+       display:inline-block;
+       padding:8px 16px;
+       background:linear-gradient(135deg,#667eea,#764ba2);
+       color:white;
+       border-radius:8px;
+       text-decoration:none;
+       font-size:14px;
+       font-weight:bold;">
+       📄 View Resume
+    </a>
+    {% else %}
+    <span style="
+        padding:6px 12px;
+        background:#f8d7da;
+        color:#721c24;
+        border-radius:6px;
+        font-size:13px;">
+        No Resume Uploaded
+    </span>
+    {% endif %}
+
+    <p>
+        <strong>ATS Score:</strong>
+
+        {% if application.ats_score >= 80 %}
+        <span style="color:green;font-weight:bold;">
+            {{ application.ats_score }}%
+        </span>
+
+        {% elif application.ats_score >= 50 %}
+        <span style="color:orange;font-weight:bold;">
+            {{ application.ats_score }}%
+        </span>
+
+        {% else %}
+        <span style="color:red;font-weight:bold;">
+            {{ application.ats_score }}%
+        </span>
+        {% endif %}
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        <span class="status {{ application.status }}">
+            {{ application.status|title }}
+        </span>
+    </p>
+
+    {% if application.status == "accepted" and application.interview_date %}
+    <div style="
+        margin-top:15px;
+        padding:15px;
+        background:#e8f5e9;
+        border-left:5px solid #28a745;
+        border-radius:8px;
+    ">
+
+        <p style="margin:0 0 8px 0; font-weight:bold; color:#155724;">
+            🎯 Interview Scheduled
+        </p>
+
+        <p><strong>Mode:</strong> {{ application.interview_mode|title }}</p>
+
+        <p>
+            <strong>Date:</strong>
+            {{ application.interview_date|date:"d M Y, h:i A" }}
+        </p>
+
+        {% if application.interview_mode == "online" %}
+        <p>
+            <strong>Meeting Link:</strong>
+            <a href="{{ application.interview_link }}" target="_blank" style="color:#28a745;">
+                Open Interview Link
+            </a>
+        </p>
+        {% else %}
+        <p><strong>Location:</strong> {{ application.interview_location }}</p>
+        {% endif %}
+
+    </div>
+    {% endif %}
+
+    {% if application.status == "pending" %}
+    <a href="{% url 'update_application_status' application.id 'accepted' %}"
+       class="btn accept-btn">
+       Accept
+    </a>
+
+    <a href="{% url 'update_application_status' application.id 'rejected' %}"
+       class="btn reject-btn">
+       Reject
+    </a>
+    {% endif %}
+
+</div>
+
+{% empty %}
+<p class="no-app">No applications yet.</p>
+{% endfor %}
+
+</body>
+</html>

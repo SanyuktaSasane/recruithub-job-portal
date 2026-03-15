@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RecruitHub</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .navbar {
+            background: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 18px;
+            color: #667eea;
+        }
+
+        .nav-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .content {
+            padding: 50px;
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">RecruitHub</div>
+
+    <div class="nav-links">
+        {% if request.user.is_authenticated %}
+            {% if request.user.profile.role == "company" %}
+                <a href="{% url 'create_job' %}">Create Job</a>
+                <a href="{% url 'view_applications' %}">Applications</a>
+            {% elif request.user.profile.role == "candidate" %}
+                <a href="{% url 'view_jobs' %}">Browse Jobs</a>
+            {% endif %}
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>

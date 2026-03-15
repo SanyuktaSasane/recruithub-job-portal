@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Company Dashboard - RecruitHub</title>
+
+<style>
+body{
+margin:0;
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(135deg,#667eea,#764ba2);
+}
+
+.navbar{
+background:white;
+padding:15px 40px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.logo{
+font-weight:bold;
+font-size:18px;
+color:#667eea;
+}
+
+.logout-btn{
+background:#ff4b5c;
+color:white;
+padding:8px 15px;
+border-radius:6px;
+text-decoration:none;
+font-size:14px;
+}
+
+.logout-btn:hover{
+background:#e63946;
+}
+
+.dashboard{
+padding:50px;
+text-align:center;
+color:white;
+}
+
+.cards{
+margin-top:40px;
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.card{
+background:white;
+color:#333;
+width:180px;
+padding:20px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+
+.card h3{
+margin-bottom:10px;
+color:#667eea;
+}
+
+.card p{
+font-size:24px;
+font-weight:bold;
+}
+
+.job-section{
+margin-top:60px;
+}
+
+.job-card{
+background:white;
+color:#333;
+padding:20px;
+border-radius:12px;
+margin:15px auto;
+max-width:600px;
+box-shadow:0 8px 20px rgba(0,0,0,0.15);
+text-align:left;
+}
+
+.delete-btn{
+background:#ff4b5c;
+color:white;
+padding:6px 12px;
+border-radius:6px;
+text-decoration:none;
+font-size:14px;
+}
+
+.delete-btn:hover{
+background:#e63946;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+
+<div class="logo">RecruitHub</div>
+
+<div style="display:flex;gap:20px;align-items:center;">
+
+<a href="{% url 'create_job' %}" style="text-decoration:none;color:#333;">
+Create Job
+</a>
+
+<a href="{% url 'view_applications' %}" style="text-decoration:none;color:#333;">
+Applications
+</a>
+
+<a href="{% url 'logout' %}" class="logout-btn">
+Logout
+</a>
+
+</div>
+</div>
+
+
+<div class="dashboard">
+
+<h1>Welcome, {{ request.user.username }} 👋</h1>
+<p>Manage your jobs and applications easily</p>
+
+
+<div class="cards">
+
+<div class="card">
+<h3>Total Jobs</h3>
+<p>{{ total_jobs }}</p>
+</div>
+
+<div class="card">
+<h3>Total Applications</h3>
+<p>{{ total_applications }}</p>
+</div>
+
+<div class="card">
+<h3 style="color:green;">Accepted</h3>
+<p>{{ accepted }}</p>
+</div>
+
+<div class="card">
+<h3 style="color:red;">Rejected</h3>
+<p>{{ rejected }}</p>
+</div>
+
+<div class="card">
+<h3 style="color:orange;">Pending</h3>
+<p>{{ pending }}</p>
+</div>
+
+</div>
+
+
+<div class="job-section">
+
+<h2>My Posted Jobs</h2>
+
+{% for job in jobs %}
+
+<div class="job-card">
+
+<h3>{{ job.title }}</h3>
+
+<p><strong>Location:</strong> {{ job.location }}</p>
+
+<p><strong>Salary:</strong> {{ job.salary_min }} - {{ job.salary_max }}</p>
+
+<a href="{% url 'delete_job' job.id %}" class="delete-btn">
+Delete Job
+</a>
+
+</div>
+
+{% empty %}
+
+<p>No jobs posted yet.</p>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+</body>
+</html>
